@@ -4,6 +4,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A simple app</title>
     <script>
+        async function reload() {
+            let filter = document.querySelector('#filter').value;
+            
+            let tbl = document.getElementById('main')
+            tbl.innerHTML = '';
+
+            let response;
+            if (filter.length ===0) {
+                response = await fetch('/cars')
+            } else {
+                response = await fetch(`/cars?filter=${filter}`);
+            }
+
+            let data = await response.json();
+            let rows = data.map((e) => `
+                        <tr>
+                            <td>
+                                ${e.name}
+                            </td>
+                            <td>
+                                ${e.color}
+                            </td>
+                        </tr>
+                    `);
+            tbl.innerHTML = rows              
+        }
+
         window.onload = async () => {
             let btn = document.getElementById('reload')
             let filter = document.getElementById('filter')
@@ -35,6 +62,7 @@
 <body>
     A simple app
     <input type="text" placeholder="filter" id="filter" />
+    <input id="reload" type="button" value="reload" onClick="reload()"/>
     <table id=main></table>
 </body>
 </html>
