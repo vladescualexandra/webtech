@@ -13,7 +13,13 @@
             } 
 
             let deleteCar = async (name) => {
-
+                console.log(name)
+                if (name.length > 0) {
+                    await fetch(`cars/${name}` , {
+                        method: 'DELETE'
+                    });
+                    load();
+                }
             }
 
             let tbl = document.getElementById('main')
@@ -39,12 +45,15 @@
                     console.warn(err)
                 }
             }
+
+            load();
         }
     </script>
 </head>
 <body>
     A simple app
     <input type="text" placeholder="name" id="name" />
+    <input type="button" value="delete" id="del"/>
     <table id=main></table>
 </body>
 </html>
