@@ -3,6 +3,7 @@
     "express": "^4.17.1",
     "jest": "^24.9.0",
     "jest-puppeteer": "^4.4.0",
+    "node-fetch": "^2.6.1",
     "puppeteer": "^2.0.0",
     "supertest": "^4.0.2"
   },
