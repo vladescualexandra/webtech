@@ -10,13 +10,30 @@ class VendingMachine extends Component {
             tokens: 0
         }
 
-        this.addToken = () => {
-            
+        this.addToken = async () => {
+            let number_of_tokens = this.state.tokens + 1;
+            await this.setState({
+                tokens: number_of_tokens
+            });
         }
 
-        this.buyProduct = (price) => {
-           
+        this.buyProduct = async (price) => {            
+            let number_of_tokens = this.state.tokens - price;
+            if (price <= this.state.tokens) {
+                await this.setState({
+                    tokens: number_of_tokens
+                });
+            } else {
+                alert('not enough tokens');
+            }
         }
+    }
+
+    componentDidMount() {
+        let store = new ProductStore();
+        this.setState({
+            products: store.getAll()
+        })
     }
 
 
@@ -25,7 +42,7 @@ class VendingMachine extends Component {
             <div>
                 {this.state.products.map((el, index) => <Product key={index} name={el.name} price={el.price} onBuy={this.buyProduct}  />)}
                 <div>Tokens: {this.state.tokens}</div>
-                <input type="button" value="add token" />
+                <input type="button" value="add token" onClick={this.addToken}/>
             </div>
         )
     }
