@@ -4,11 +4,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A simple app</title>
     <script>
+    async function loadAction() {
+    let response = await fetch('/cars');
+    let data = await response.json();
+    let table = document.querySelector('#main');
+    table.innerHTML = '';
+    for (let car of data) {
+        if (car.color === 'red') {
+            let tr = document.createElement('tr');
+            let td = document.createElement('td');
+            td.textContent = car.name;
+            tr.append(td);
+            table.append(tr);
+        }
+    }
+} 
  
     </script>
 </head>
 <body>
     A simple app
-    <table id=main></table>
+    <input id="load" type="button" value="load" onclick="loadAction()"/>
+    <table id="main"></table>
 </body>
 </html>
