@@ -1,3 +1,4 @@
+const db = require('./db.json')
 const express = require('express')
 const bodyParser = require('body-parser')
 const Sequelize = require('sequelize')
@@ -6,8 +7,8 @@ const mysql = require('mysql2/promise')
 
 // TODO: change the credentials to fit your own
 // if user does not have the right to create, run (as root): GRANT ALL PRIVILEGES ON *.* TO 'app'@'localhost';
-const DB_USERNAME = 'app1'
-const DB_PASSWORD = 'welcome123'
+const DB_USERNAME = db.username
+const DB_PASSWORD = db.password
 
 let conn
 
@@ -47,7 +48,7 @@ let FoodItem = sequelize.define('foodItem', {
 
 
 const app = express()
-// TODO
+app.use(bodyParser.json()) // !! BODY PARSER FFS
 
 app.get('/create', async (req, res) => {
     try{
@@ -81,10 +82,30 @@ app.get('/food-items', async (req, res) => {
 
 app.post('/food-items', async (req, res) => {
     try{
-        // TODO
+
+        if (JSON.stringify(req.body) === JSON.stringify({})) {
+            res.status(400).send({message: 'body is missing'});    
+        } else {
+            if (!req.body.hasOwnProperty('name') 
+                    || !req.body.hasOwnProperty('category')
+                    || !req.body.hasOwnProperty('calories')) {
+                res.status(400).send({message: 'malformed request'});
+            } else {
+                if (req.body.calories < 0) {
+                    res.status(400).send({message: 'calories should be a positive number'});
+                } else {
+
+                    if (req.body.category.length < 3 || req.body.category.length > 10) {
+                        res.status(400).send({message: 'not a valid category'});
+                    } else {
+                        res.status(201).send({message: 'created'});
+                    }
+                }
+            }
+        }
     }
     catch(err){
-        // TODO
+        res.status(500).send({message: 'server error'});    
     }
 })
 
