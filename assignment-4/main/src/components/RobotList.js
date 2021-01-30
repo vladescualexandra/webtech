@@ -11,9 +11,10 @@ class RobotList extends Component {
 		this.state = {
 			robots : []
 		}
+
+		this.store = new RobotStore()
 	}
 	componentDidMount(){
-		this.store = new RobotStore()
 		this.setState({
 			robots : this.store.getRobots()
 		})
@@ -22,11 +23,20 @@ class RobotList extends Component {
 				robots : this.store.getRobots()
 			})			
 		})
+
+		this.handleAdd = (robot) => {
+			this.store.addRobot({
+				name: robot.name, 
+				type: robot.type,
+				mass: robot.mass
+			});
+			
+		}
 	}
 	render() {
 		return (
 			<div>
-				 
+				<RobotForm onAdd={this.handleAdd}/>
 				{
 					this.state.robots.map((e, i) => 
 						<Robot item={e} key={i} />
