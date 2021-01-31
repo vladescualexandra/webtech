@@ -10,22 +10,36 @@ class VendingMachine extends Component {
             tokens: 0
         }
 
+        this.store = new ProductStore();
+
+
         this.addToken = () => {
-            
+            this.setState({
+                tokens: this.state.tokens + 1
+            })
         }
 
         this.buyProduct = (price) => {
-           
+           if (this.state.tokens >= price) {
+               this.setState({
+                   tokens: this.state.tokens - price
+               })
+            }
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            products: this.store.getAll()
+        })
+    }
 
     render() {
         return (
             <div>
                 {this.state.products.map((el, index) => <Product key={index} name={el.name} price={el.price} onBuy={this.buyProduct}  />)}
                 <div>Tokens: {this.state.tokens}</div>
-                <input type="button" value="add token" />
+                <input type="button" value="add token" onClick={this.addToken}/>
             </div>
         )
     }
