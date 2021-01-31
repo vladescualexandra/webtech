@@ -11,7 +11,7 @@
             tbl.innerHTML = '';
 
             let response;
-            if (filter.length ===0) {
+            if (filter.length === 0) {
                 response = await fetch('/cars')
             } else {
                 response = await fetch(`/cars?filter=${filter}`);
