@@ -8,6 +8,23 @@ class CompanyList extends Component {
 		this.state = {
 			companies : []
 		}
+
+		this.handleEdit = (item) => {
+			this.store = new CompanyStore();
+			this.store.saveOne(item.id, {
+				name: item.name,
+				employees: item.employees,
+				revenue: item.revenue
+			});
+			this.setState({
+				companies : this.store.getAll()
+			})
+			this.store.emitter.addListener('UPDATE', () => {
+				this.setState({
+					companies : this.store.getAll()
+				})			
+			})
+		}
 		
 	}
 	componentDidMount(){
@@ -24,7 +41,7 @@ class CompanyList extends Component {
   render() {
     return (
       <div>
-      	
+      	{this.state.companies.map((el, index) => <Company key={index} item={el} onSave={this.handleEdit} />)}
       </div>
     )
   }

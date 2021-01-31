@@ -5,6 +5,7 @@ class Company extends Component {
 		super(props)
 		let {item} = this.props
 		this.state = {
+      id: item.id,
 			name : item.name,
 			employees : item.employees,
 			revenue : item.revenue,
@@ -13,15 +14,34 @@ class Company extends Component {
 			this.setState({
 				[evt.target.name] : evt.target.value
 			})
-		}
-	}
+    }  
+
+    this.edit = () => {
+      this.setState({
+        isEditing: !this.state.isEditing
+      });      
+    }
+
+    this.save = () => {
+      this.props.onSave(this.state);
+      this.edit();
+    }
+  }
+  
+
   render() {
     let {item} = this.props
     if (this.state.isEditing){
       return (
         <div>
-          <input type="button" value="save"  />
-          <input type="button" value="cancel" />						
+          <input id="name" type="text" placeholder={this.state.name} 
+              onChange={e => this.handleChange(e)}/>
+          <input id="employees" type="text" placeholder={this.state.employees} 
+              onChange={e => this.handleChange(e)}/>
+          <input id="revenue" type="text" placeholder={this.state.revenue} 
+              onChange={e => this.handleChange(e)}/>
+          <input type="button" value="save"  onClick={this.save} />
+          <input type="button" value="cancel" onClick={this.edit} />						
         </div>
       )
     }
@@ -29,7 +49,7 @@ class Company extends Component {
       return (
         <div>
           Name {item.name} with {item.employees} employees {item.revenue} revenue
-          <input type="button" value="edit" />        
+          <input type="button" value="edit" onClick={this.edit}/>        
         </div>
       )
     }
