@@ -5,7 +5,7 @@ const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 
 const DB_USERNAME = 'root'
-const DB_PASSWORD = 'welcome12#'
+const DB_PASSWORD = 'pass'
 
 let conn
 
@@ -72,6 +72,33 @@ app.get('/ships', async (req, res) => {
 })
 
 app.post('/ships', async (req, res) => {
+    try {
+        if (JSON.stringify(req.body) === JSON.stringify({})) {
+            res.status(400).send({message: 'body is missing'});
+        } else {
+            if (!req.body.hasOwnProperty('name')
+                    || !req.body.hasOwnProperty('portOfSail')
+                    || !req.body.hasOwnProperty('displacement')) {
+                        res.status(400).send({message: 'malformed request'});
+            } else {
+                if (req.body.displacement < 1000) {
+                    res.status(400).send({message: 'displacement should be over 1000'});
+                } else {
+                    await Ship.create({
+                        name: req.body.name,
+                        portOfSail: req.body.portOfSail,
+                        displacement: req.body.displacement
+                    });
+                    res.status(201).send({message: 'created'});
+                }
+            }
+
+        }
+    } catch {
+        console.warn(err.stack)
+        res.status(500).json({message : 'server error'}) 
+    }
+
 })
 
 module.exports = app
