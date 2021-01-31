@@ -5,7 +5,7 @@ const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 
 const DB_USERNAME = 'root'
-const DB_PASSWORD = 'welcome12#'
+const DB_PASSWORD = 'pass'
 
 let conn
 
@@ -78,9 +78,34 @@ app.get('/ships/:id', async (req, res) => {
 
 
 app.put('/ships/:id', async (req, res) => {
+    try {
+        let ship = await Ship.findByPk(req.params.id);
+        if (ship === null) {
+            res.status(404).json({message: 'not found'});
+        } else {
+            await ship.update(req.body);
+            res.status(202).send({message: 'accepted'});
+        }
+    } catch (err) {
+        console.warn(err.stack)
+        res.status(500).json({message : 'server error'}) 
+    }
 })
 
 app.delete('/ships/:id', async (req, res) => {
+    try {
+        let ship = await Ship.findByPk(req.params.id);
+        if (ship === null) {
+            res.status(404).json({message: 'not found'});
+        } else {
+            await ship.destroy();
+            res.status(202).send({message: 'accepted'});
+
+        }
+    } catch(err) {        
+        console.warn(err.stack)
+        res.status(500).json({message : 'server error'}) 
+    }
 })
 
 
