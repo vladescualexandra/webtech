@@ -9,6 +9,18 @@ class CompanyList extends Component {
 		this.state = {
 			companies : [],
 		}
+
+		this.handleSelect = (item) => {
+			this.setState({
+				selected: item
+			})
+		}
+
+		this.handleCancel = () => {
+			this.setState({
+				selected: null
+			})
+		}
 		
 	}
 	componentDidMount(){
@@ -24,13 +36,18 @@ class CompanyList extends Component {
 	}
   render() {
 	if (this.state.selected){
+		return (
+			<div>
+			  <CompanyDetails item={this.state.selected} onCancel={this.handleCancel}/>
+			</div>
+		  )
 	}
 	else{
 		return (
 		  <div>
 			{
-				this.state.companies.map((e, i) => 
-					<Company item={e} key={i} />
+				this.state.companies.map((el, i) => 
+					<Company item={el} key={i} onSelect={this.handleSelect}/>
 				)
 			}
 		  </div>
