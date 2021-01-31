@@ -3,8 +3,8 @@ const Sequelize = require('sequelize');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2/promise');
 
-const DB_USERNAME = 'app';
-const DB_PASSWORD = 'p@ss';
+const DB_USERNAME = 'root';
+const DB_PASSWORD = 'pass';
 let conn
 
 mysql.createConnection({
@@ -64,11 +64,40 @@ app.get('/device', async (req, res) => {
 })
 
 app.post('/device', async (req, res) => {
-    
+    try {
+
+        if (JSON.stringify(req.body) === JSON.stringify({})) {
+            res.status(400).send({message: 'bad request'});
+        } else {
+            if (req.body.price < 0) {
+                res.status(400).send({message: 'bad request'});
+            } else if (req.body.name.length < 4) {
+                res.status(400).send({message: 'bad request'});
+            } else {
+                await Device.create(req.body);
+                res.status(201).send({message: 'device created'});
+            }
+        }
+
+    } catch (err) {
+        res.status(500).send({message: 'server error'});
+    }
 })
 
 app.delete('/device/:id', async (req, res) => {
-   
+    try {
+
+        let device = await Device.findByPk(req.params.id);
+        if (device !== null) {
+            await device.destroy();
+            res.status(202).send({message: 'device deleted'});
+        } else {
+            res.status(404).send({message: 'device not found'});
+        }
+
+    } catch (err) {
+        res.status(500).send({message: 'server error'});
+    }
 })
 
 module.exports = app;
