@@ -4,12 +4,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A simple app</title>
     <script>
-        
+            window.onload = async () => {
+                load();
+            }
 
             let load = async () => {
                 try{
                     let response = await fetch(`/profile.json`)
+                    let data = await response.json();
 
+                    let content = document.querySelector('#content');
+
+                    for (let detail in data) {
+                        let p = document.createElement('p');
+                        p.innerText = data[detail];
+                        content.append(p);
+                    }
                 }
                 catch(err){
                     console.warn(err)
@@ -17,12 +27,15 @@
             }
 
             let convert = () => {
-                
+                let p = document.querySelectorAll('p')[1];
+                let nr = parseInt(p.innerText);
+                nr = nr / 1000000;
+                p.innerText = nr + "M";
             }
     </script>
 </head>
 <body>
-
+    <h1>Profil influencer</h1>
     <div id="content"></div>
     <input type="button" value="convert" id="convert" onclick="convert()" />
 </body>
