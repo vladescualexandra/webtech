@@ -5,7 +5,7 @@ const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 
 const DB_USERNAME = 'root'
-const DB_PASSWORD = 'welcome12#'
+const DB_PASSWORD = 'pass'
 
 let conn
 
@@ -61,7 +61,44 @@ app.get('/create', async (req, res) => {
 })
 
 app.get('/ships', async (req, res) => {
+    try {
+        let pageNo = req.query.pageNo;
+        let pageSize = req.query.pageSize;
+        let ships = [];
 
+        if (pageNo === undefined && pageSize === undefined) {
+            ships = await Ship.findAll();
+            res.status(200).send(ships);
+
+        } else if (pageNo !== undefined && pageSize === undefined) {
+            pageSize = 5;
+            ships = await Ship.findAll({
+                offset: pageNo * pageSize,
+                limit: pageSize
+            });
+            res.status(200).send(ships);
+        } else if (pageNo !== undefined && pageSize !== undefined) {
+            try {
+                pageNo = parseInt(pageNo);
+                pageSize = parseInt(pageSize);
+
+                ships = await Ship.findAll({
+                    offset: pageNo * pageSize,
+                    limit: pageSize
+                });
+                res.status(200).send(ships);
+            } catch(err) {
+                ships = await Ship.findAll();
+                res.status(200).send(ships);
+            }
+        } else {
+            ships = await Ship.findAll();
+            res.status(200).send(ships);
+        }
+
+    } catch(err) {
+		res.status(500).send({message : 'server error'})		
+    }
 })
 
 app.post('/ships', async (req, res) => {
