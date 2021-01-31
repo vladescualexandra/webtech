@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const Sequelize = require('sequelize')
+const Op = Sequelize.Op;
 
 const mysql = require('mysql2/promise')
 
@@ -63,7 +64,20 @@ app.get('/create', async (req, res) => {
 
 app.get('/homeworks', async (req, res) => {
     try{
+        let ships = [];
+        if (req.query.pass === 'true') {
+            homeworks = await Homework.findAll({
+                where: {
+                    grade: {
+                        [Op.gte]: 5
+                    }
+                }
+            })
+        } else {
+            homeworks = await Homework.findAll();
 
+        }
+        res.status(200).send(homeworks);
     }
     catch(err){
         console.warn(err.stack)
@@ -74,6 +88,17 @@ app.get('/homeworks', async (req, res) => {
 app.get('/homeworks/:id', async (req, res) => {
     try{
 
+        let homework = await Homework.findByPk(req.params.id);
+        if (homework === null) {
+            res.status(404).send({message: 'not found'});
+        } else {
+
+            if (req.get('accept') === 'text/plain') {
+                res.status(200).send(homework.content);
+            } else {
+                res.status(200).send(homework);
+            }
+        }
         
     }
     catch(err){
