@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>A simple app</title>
+    </head>
+    <body>
+        <script>
+            window.onload = async () => {
+
+                let div = document.querySelector('#content');
+                
+                let response = await fetch('/invoice.json');
+                let data = await response.json();
+                
+                div.innerHTML = `
+                    <h2> Invoice number: ${data.invoiceNumber} </h2>
+                    <h3> Invoice series: ${data.invoiceSeries} </h3>
+                ` ;
+
+                for (let item of data.invoiceItems) {
+                    div.innerHTML += `<div>
+                        <span> ${item.productName} </span>
+                        <span> ${item.quantity} </span>
+                        <span> ${item.productPrice} </span>
+                    </div>`;
+                }
+
+            }
+
+        </script>
+
+        <div id="content"></div>
+
+
+    </body>
+</html>

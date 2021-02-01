@@ -4,16 +4,39 @@
  - distanța dintre cele 2 array-uri este numărul de elemente diferite dintre ele
  - dacă parametrii nu sunt array-uri se va arunca o excepție ("InvalidType")
 */
-/*
- - the distance function receives as parameters two arrays
- - each element can appear in each array at most once; any duplicates are ignored
- - the distance between the 2 arrays is the number of different elements between them
- - if the parameters are not arrays an exception is thrown ("InvalidType")
-*/
+
 
 function distance(first, second){
-	//TODO: implementați funcția
-	// TODO: implement the function
+	if (!Array.isArray(first)) {
+		throw {message: 'InvalidType'};
+	}
+
+
+
+	if (!Array.isArray(second)) {
+		throw {message: 'InvalidType'};
+	} 
+
+
+	first = first.filter((item, index) => first.indexOf(item) == index);
+	second = second.filter((item, index) => second.indexOf(item) == index);
+
+	let count = 0;
+	for (let i=0; i < first.length; i++) {
+		if (!second.includes(first[i])) {
+			count++;
+		}
+	}
+
+	for (let i=0; i < second.length; i++) {
+		if (!first.includes(second[i])) {
+			count++;
+		}
+	}
+
+	return count;
+
+
 }
 
 

@@ -6,10 +6,6 @@ import Robot from './Robot'
 // afișați o componentă Robot pentru fiecare robot din stare 
 // o componentă robot ar trebui să afișeze un robot și să permită ștergerea lui
 
-// TODO : add a Robot component 
-// show a Robot component for each robot in the state
-// a robot component should show a robot and allow deletion of a robot
-
 
 class RobotList extends Component {
 	constructor(){
@@ -36,7 +32,7 @@ class RobotList extends Component {
     return (
       <div>
       	{
-      		
+			this.state.robots.map((item, index) => <Robot key={index} item={item} onDelete={this.deleteRobot}/>)
       	}
       </div>
     )
