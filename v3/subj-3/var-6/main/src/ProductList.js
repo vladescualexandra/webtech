@@ -1,4 +1,5 @@
 import React from 'react';
+import { AddProduct } from './AddProduct';
 
 export class ProductList extends React.Component {
     constructor(){
@@ -8,9 +9,18 @@ export class ProductList extends React.Component {
         };
     }
 
+    handleAdd = (prod) => {
+        let prds = this.state.products;
+        prds.push(prod);
+        this.setState({
+            products: prds
+        })
+    }
+
     render(){
         return(
             <div>
+                <AddProduct onAdd={this.handleAdd}/>
             </div>
         )
     }
