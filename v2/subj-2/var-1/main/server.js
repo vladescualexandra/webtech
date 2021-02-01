@@ -5,15 +5,18 @@ const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 
 const DB_USERNAME = 'root'
-const DB_PASSWORD = 'welcome12#'
+const DB_PASSWORD = 'pass'
+let conn;
 
 mysql.createConnection({
 	user : DB_USERNAME,
 	password : DB_PASSWORD
 })
 .then(async (connection) => {
-	await connection.query('DROP DATABASE IF EXISTS tw_exam')
-	await connection.query('CREATE DATABASE IF NOT EXISTS tw_exam')
+	conn = connection
+	return await connection.query('CREATE DATABASE IF NOT EXISTS tw_exam')
+}).then(() => {
+	return conn.end()
 })
 .catch((err) => {
 	console.warn(err.stack)
@@ -89,10 +92,21 @@ app.put('/authors/:id', async (req, res) => {
 	// un autor inexistent nu poate fi modificat
 	// numai câmpurile care sunt definite in request trebuie actualizate
 
-	// TODO: implement the function
-	// add the method to modify an author
-	// a non existant author cannot be updated
-	// only defined fields should be updated
+	try {
+		let author = await Author.findByPk(req.params.id);
+		if (author === null) {
+			res.status(404).send({message: 'not found'});
+		} else {
+			for (let prop in req.body) {
+				author.prop = req.body.prop;
+			}
+			res.status(202).send({message: 'accepted'});
+		}
+
+	} catch(err) {
+		res.status(500).json({message : 'server error'});
+	}
+
 })
 
 app.delete('/authors/:id', async (req, res) => {
@@ -100,9 +114,6 @@ app.delete('/authors/:id', async (req, res) => {
 	// adaugați o funcție pentru ștergerea unui autor
 	// un autor inexistent nu poate fi șters
 
-	// TODO: implement the function
-	// add the function to delete an author
-	// a non existant author cannot be deleted
 })
 
 app.listen(8080)
