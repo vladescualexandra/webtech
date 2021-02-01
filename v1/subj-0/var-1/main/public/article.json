@@ -1,0 +1,17 @@
+{
+    "title": "Article schema",
+    "abstract": "abstract-prop",
+    "keywords": ["keyword-1", "keyword-2", "keyword-2"],
+    "authors": [
+        {
+            "fullName": "full name 1",
+            "institution": "instit 1",
+            "email": "email 1"
+        },
+        {
+            "fullName": "full name 2",
+            "institution": "instit 2",
+            "email": "email 2"
+        }
+    ]
+}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <script>
+            window.onload = async () => {
+                let response = await fetch('/article.json');
+                let data = await response.json();
+                
+                let div = document.querySelector('#content');
+                
+                for (let prop in data) {
+                    div.innerText += data[prop];
+                }
+            }
+        </script>
+
+        <div id="content">
+
+        </div>
+
+    </body>
+</htm>

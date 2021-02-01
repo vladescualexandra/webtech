@@ -19,10 +19,22 @@ export class AddCar extends React.Component {
         this.props.onAdd(car);
     }
 
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
     render(){
         return (
             <div>
-                
+                <input type="text" id="make" name="make" 
+                    onChange={(e) => this.handleChange(e)}/>
+                <input type="text" id="model" name="model"
+                    onChange={(e) => this.handleChange(e)}/>
+                <input type="text" id="price" name="price"
+                    onChange={(e) => this.handleChange(e)}/>
+                <input type="button" value="add car" onClick={this.addCar}/>
             </div>
         )
     }
