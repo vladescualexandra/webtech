@@ -34,7 +34,7 @@ describe('TEST API POST Method', () => {
     })
 
     test('If the sent car already exists send status code 500 with body {"message": "Car already exists"}. Checking is done by model', (done) => {
-        request(app).post('/products').
+        request(app).post('/cars').
             send({
                 make: "BMW",
                 model: "X6",
@@ -46,7 +46,7 @@ describe('TEST API POST Method', () => {
     })
 
     test('If the body is valid the car should be added to the array', (done) => {
-        request(app).post('/products').send({
+        request(app).post('/cars').send({
             make: "BMW",
             model: "X5",
             price: 40000

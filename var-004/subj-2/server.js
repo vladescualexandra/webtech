@@ -5,7 +5,7 @@ const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 
 const DB_USERNAME = 'root'
-const DB_PASSWORD = 'welcome12#'
+const DB_PASSWORD = 'pass'
 
 mysql.createConnection({
 	user : DB_USERNAME,
@@ -60,6 +60,39 @@ app.get('/authors', async (req, res) => {
 	// TODO: add the function to get all authors
 	// should get all authors
 	// should allow for pagination with a pageNo and a pageSize possibly sent as query parameters
+
+	try {
+
+		let pageNo = req.query.pageNo;
+		let pageSize = req.query.pageSize;
+
+		if (pageNo === undefined && pageSize === undefined) {
+			let authors = await Author.findAll();
+			res.status(200).json(authors);
+		} else if (pageNo !== undefined && pageSize === undefined) {
+			pageSize = 5;
+			let authors = await Author.findAll({
+				offset: pageNo * pageSize,
+				limit: pageSize
+			});
+			res.status(200).json(authors);
+		} else if (pageNo !== undefined && pageSize !== undefined) {
+			pageNo = parseInt(pageNo);
+			pageSize = parseInt(pageSize);
+			let authors = await Author.findAll({
+				offset: pageNo * pageSize,
+				limit: pageSize
+			});
+			res.status(200).json(authors);
+		} else {
+			let authors = await Author.findAll();
+			res.status(200).json(authors);
+		}
+
+	} catch(err) {
+		res.status(500).send({message: 'server error'});
+	}
+
 })
 
 app.post('/authors', async (req, res) => {

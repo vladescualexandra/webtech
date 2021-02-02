@@ -9,7 +9,17 @@ class RobotList extends Component {
 			robots : []
 		}
 		this.saveRobot = (id, robot) => {
-			this.store.saveRobot(id, robot)
+			this.store.saveRobot(id, robot);
+			this.setState({
+				robots : this.store.getRobots()
+			});
+
+			this.store.emitter.addListener('UPDATE', () => {
+				this.setState({
+					robots : this.store.getRobots()
+				})			
+			})
+			console.log(this.state.robots);
 		}
 	}
 	componentDidMount(){

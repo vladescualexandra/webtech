@@ -8,16 +8,6 @@ Dacă se apelează makeNest, un pinguin va apela metoda părintelui său
 Vedeți testele pentru formatul exact al mesajelor
 */
 
-/*
-There is an object type called Bird
-Define the Penguin type
-A penguin is a child type for Bird and has an additional method called swim(distance)
-A penguin cannot be created without a name of type string
-A penguin cannot fly and will say that if asked
-A penguin can make a nest via its parent's method
-See the tests for the accurate format of messages
-*/
-
 class Bird {
 	constructor(name){
 		this.name = name
@@ -34,7 +24,24 @@ class Bird {
 
 
 // TODO: implementați tipul Pinguin
-// TODO: implement the Penguin type
+
+class Penguin extends Bird {
+	constructor(name) {
+		if (typeof(name) !== 'string') {
+			throw {message: 'CreationError'};
+		} else {
+			super(name);
+		}
+	}
+
+	fly(){
+		return `${this.name} is a penguin and cannot fly`
+	}
+
+	swim(distance) {
+		return `${this.name} swims ${distance}`
+	}
+}
 
 module.exports.Bird = Bird
-// module.exports.Penguin = Penguin
+module.exports.Penguin = Penguin

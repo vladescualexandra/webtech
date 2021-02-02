@@ -9,6 +9,12 @@ export class AddStudent extends React.Component {
             age: ''
         };
     }
+    
+    handleChange = (e) => {
+        this.setState({
+            [e.target.id]: e.target.value
+        })
+    }
 
     addStudent = () => {
         let student = {
@@ -22,7 +28,15 @@ export class AddStudent extends React.Component {
     render(){
         return (
             <div>
-                
+                <input type="text" id="name" 
+                    onChange={(e) => this.handleChange(e)} />
+                <input type="text" id="surname" 
+                    onChange={(e) => this.handleChange(e)} />
+                <input type="text" id="age" 
+                    onChange={(e) => this.handleChange(e)} />
+
+                <input type="button" value="add student" 
+                    onClick={this.addStudent}/>
             </div>
         )
     }
