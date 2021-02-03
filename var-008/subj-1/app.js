@@ -6,18 +6,24 @@
  - funcția înlocuiește fiecare cheie din dicționar găsită în textul inițial cu valoarea tradusă
 */
 
-/*
- - the translate function receives as parameters a string and an object
- - the function throws exceptions if the types are not the required ones (message is "InvalidType")
- - the dictionary object has in its keys the inital values and in its values the translation of the key
- - the values in the dictionary are strings
- - the function replaces each dictinary key found in the initial text with the value in the dictionary corresponding to the key
-*/
-
-
 function translate(text, dictionary){
-	// TODO: implementați funcția
-	// TODO: implement the function
+	
+	if (typeof(text) !== 'string') {
+		throw {message: 'InvalidType'};
+	} else if (typeof(dictionary) !== 'object' || dictionary === null) {
+		throw {message: 'InvalidType'};
+	} else {
+		let converted = text.split(" ");
+		console.log("initial: " + text);
+		let counter = 0;
+		for (let prop in dictionary) {
+			converted[counter] = dictionary[prop];
+			counter++;
+		}
+
+		let newText = converted.join(' ');
+		return newText;
+	}
 }
 
 

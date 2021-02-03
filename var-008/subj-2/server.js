@@ -5,7 +5,7 @@ const Sequelize = require('sequelize')
 const mysql = require('mysql2/promise')
 
 const DB_USERNAME = 'root'
-const DB_PASSWORD = 'welcome12#'
+const DB_PASSWORD = 'pass'
 
 mysql.createConnection({
 	user : DB_USERNAME,

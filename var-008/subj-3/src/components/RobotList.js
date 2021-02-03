@@ -13,8 +13,52 @@ class RobotList extends Component {
 		super()
 		this.state = {
 			robots : [],
+			nameFilter: '',
+			typeFilter: ''
 		}
 	}
+
+
+	handleChange = (e, id) => {
+		this.setState({
+			[id]: e.target.value
+		});
+
+		console.log(this.state.nameFilter, this.state.typeFilter);
+
+		if (this.state.nameFilter === '' && this.state.nameFilter === '') {
+			this.setState({
+				robots : this.store.getRobots()
+			});	
+		} else if (this.state.nameFilter !== ''
+					&& this.state.typeFilter === '') {
+
+			let rbts = this.state.robots.filter((e) => e.name === this.state.nameFilter); 
+			this.setState({
+				robots : rbts
+			});	
+
+		} else if (this.state.nameFilter === ''
+					&& this.state.typeFilter !== '') {
+
+			let rbts = this.state.robots.filter((e) => e.name === this.state.typeFilter); 
+			this.setState({
+				robots : rbts
+			});	
+
+		} else {
+
+			let rbts = this.state.robots.filter((e) => e.name === this.state.nameFilter);
+			rbts = rbts.filter((e) => e.type === this.state.typeFilter); 
+			this.setState({
+				robots : rbts
+			});	
+
+		}
+
+		
+	}
+
 	componentDidMount(){
 		this.store = new RobotStore()
 		this.setState({
@@ -29,8 +73,12 @@ class RobotList extends Component {
 	render() {
 		return (
 			<div>
+				<input type="text" id="nameFilter" name="nameFilter"
+					onChange={(e) => this.handleChange(e, 'nameFilter')} />
+				<input type="text" id="typeFilter" name="typeFilter" 
+					onChange={(e) => this.handleChange(e, 'typeFilter')} />
 				{
-					robots.map((e, i) => 
+					this.state.robots.map((e, i) => 
 						<Robot item={e} key={i} />
 					)
 				}

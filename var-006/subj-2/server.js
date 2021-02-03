@@ -6,14 +6,13 @@ const Op = Sequelize.Op
 const mysql = require('mysql2/promise')
 
 const DB_USERNAME = 'root'
-const DB_PASSWORD = 'welcome12#'
+const DB_PASSWORD = 'pass'
 
 mysql.createConnection({
 	user : DB_USERNAME,
 	password : DB_PASSWORD
 })
 .then(async (connection) => {
-	await connection.query('DROP DATABASE IF EXISTS tw_exam')
 	await connection.query('CREATE DATABASE IF NOT EXISTS tw_exam')
 })
 .catch((err) => {
@@ -57,10 +56,47 @@ app.get('/create', async (req, res) => {
 app.get('/authors', async (req, res) => {
 	// TODO: implementați funcția
 	// ar trebui să listeze toate cărțile unui autor
-	// ar trebui să permită filtrare bazată pe adresă și email (filterele se numesc address și email și sunt trimise ca query parameters)
-	// TODO: implement the function
-	// should get all authors
-	// should allow for filtering based on address and email (filters are called address and email and are sent as query parameters)
+	// ar trebui să permită filtrare bazată pe adresă și email 
+	// (filterele se numesc address și email și sunt trimise ca query parameters)
+	
+	try{
+		
+		if (req.query.address !== undefined
+			&& req.query.address.length !== 0 
+			&& req.query.email === undefined) {
+			let authors = await Author.findAll({
+				where: {
+					address: req.query.address
+				}
+			});
+		} else if (req.query.address === undefined 
+					&& req.query.email !== undefined
+					&& req.query.email.length !== 0) {
+			let authors = await Author.findAll({
+				where: {
+					email: req.query.email
+				}
+			});
+		} else if (req.query.address !== undefined 
+					&& req.query.email !== undefined
+					&& req.query.address.length !== 0
+					&& req.query.email.length !== 0) {
+			let authors = await Author.findAll({
+				where: {
+					address: req.query.address,
+					email: req.query.email
+				}
+			});
+		} else {
+			let authors = await Author.findAll();
+		}
+
+		res.status(200).send(authors);
+	}
+	catch(err){
+		// console.warn(err.stack)
+		res.status(500).json({message : 'server error'})		
+	}
 })
 
 app.post('/authors', async (req, res) => {

@@ -7,18 +7,28 @@
  - dacă textul nu este un string sau dicționarul nu este un array de string-uri se va arunca o excepție (mesajul TypeError)
 */
 
-/*
- - the capitalize function receives as parameters a string and an array
- - the dictionary (the array) contains a series of words
- - in the initial text the words are separated by space
- - each dictionary term has to appear capitalized in the result
- - the result is a new string without modifying the initial one
- - if the text is not string or the dictionary not an array of strings an exception is thrown (message is TypeError)
-*/
 
 function capitalize(text, dictionary){
 	// TODO: implementați funcția
-	// TODO: implement the function
+	if (typeof(text) !== 'string') {
+		throw {message : 'TypeError'};
+	} else if (!Array.isArray(dictionary)) {
+		throw {message : 'TypeError'};
+	} else {
+		for (let item of dictionary) {
+			if (typeof(item) !== 'string') {
+				throw {message : 'TypeError'};
+			}
+		}
+
+		let newText = text;
+		for (let item of dictionary) {
+			let capitalized = item.substring(0, 1).toUpperCase() + item.substring(1);
+			newText = newText.replace(item, capitalized);
+		}
+
+		return newText;
+	}
 }
 
 
