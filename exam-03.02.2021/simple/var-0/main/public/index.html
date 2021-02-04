@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A simple app</title>
+    <script>
+        window.onload = () => {
+            let loadBtn = document.querySelector('#load');
+            let table = document.querySelector('#main');
+            loadBtn.onclick = async () => {
+                let response = await fetch('/cars');
+                let data = await response.json();
+
+                table.innerHTML = '';
+                for (let item of data) {
+                    if (item.color === 'red') {
+                        let tr = document.createElement('tr');
+                        let td1 = document.createElement('td');
+                        let td2 = document.createElement('td');
+
+                        td1.innerText = item.name;
+                        td2.innerText = item.color;
+
+                        tr.append(td1);
+                        tr.append(td2);
+                        table.append(tr);
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    A simple app
+    <button type="button" id="load">Load</button>
+    <table id=main></table>
+</body>
+</html>
